@@ -1,0 +1,25 @@
+# Source files
+src/
+tests/
+examples/
+
+# Config files
+.eslintrc.js
+.prettierrc
+.editorconfig
+.github/
+.changeset/
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+
+# Development files
+*.log
+*.tgz
+node_modules/
+coverage/
+.env
+.env.*
+
+# Build files
+*.tsbuildinfo
