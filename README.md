@@ -180,17 +180,48 @@ const hooks = createPermissionHooks(securityPolicy, {
 
 ## API Reference
 
-### `createToolExecutionProxy(tools, hooks)`
+### Core Functions
+
+#### `createToolExecutionProxy(tools, hooks)`
 Creates a proxy wrapper for tools with permission checks.
 
-### `createPermissionHooks(securityPolicy, options?)`
+#### `createPermissionHooks(securityPolicy, options?)`
 Creates hook functions for permission control based on the security policy.
 
-### `usePermissionDialog()`
-React hook for managing permission dialogs.
+### React Components
 
-### `SecurityLevel` enum
-Defines security levels: NONE, LOW, MEDIUM, HIGH, CRITICAL.
+#### `PermissionDialog`
+A customizable dialog component for permission requests.
+
+#### `SecurityBadge`
+A visual indicator for security levels.
+
+### React Hooks
+
+#### `usePermissionDialog()`
+A hook for managing permission dialogs.
+
+#### `usePermissionState()`
+A hook for managing and tracking permission states.
+
+### Types
+
+#### `SecurityLevel`
+Enum defining security levels: NONE, LOW, MEDIUM, HIGH, CRITICAL.
+
+#### `SecurityPolicy`
+Interface for configuring tool security policies.
+
+#### `ParameterRule`
+Interface for defining parameter-based rules.
+
+## Examples
+
+See the [examples](./examples) directory for complete working examples:
+
+- [Basic Usage](./examples/basic-usage)
+- [React Integration](./examples/with-react)
+- [Custom Policy](./examples/custom-policy)
 
 ## Contributing
 
@@ -198,4 +229,4 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ## License
 
-MIT © [Your Name/Organization]
+MIT © 2025 toruSakari

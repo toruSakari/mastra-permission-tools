@@ -1,8 +1,7 @@
 import { ProxyHooks, PermissionResponse } from '../types/proxy';
 import { SecurityPolicy, SecurityLevel } from '../types/security';
 import { IPermissionStore, generatePermissionKey } from './store';
-import { 
-  getSecurityLevelValue, 
+import {  
   compareSecurityLevels,
   DEFAULT_SECURITY_LEVELS 
 } from './security-levels';
@@ -29,7 +28,6 @@ export function createPermissionHooks(
     store,
     onPermissionRequest,
     onPermissionGranted,
-    onPermissionDenied,
     defaultUserId = 'anonymous',
   } = options;
 
@@ -98,7 +96,7 @@ export function createPermissionHooks(
       return result;
     },
 
-    onError: async (toolName, error, context) => {
+    onError: async (toolName, error) => {
       // エラー処理
       console.error(`Tool execution error for ${toolName}:`, error);
       
