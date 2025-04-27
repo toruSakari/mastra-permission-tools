@@ -1,4 +1,4 @@
-import { SecurityLevel } from '../types/security';
+import { SecurityLevel } from "../types/security";
 
 /**
  * セキュリティレベルを数値に変換する
@@ -6,15 +6,15 @@ import { SecurityLevel } from '../types/security';
  * @returns 数値化されたセキュリティレベル
  */
 export function getSecurityLevelValue(level?: SecurityLevel): number {
-  const values: Record<SecurityLevel, number> = {
-    [SecurityLevel.NONE]: 0,
-    [SecurityLevel.LOW]: 1,
-    [SecurityLevel.MEDIUM]: 2,
-    [SecurityLevel.HIGH]: 3,
-    [SecurityLevel.CRITICAL]: 4,
-  };
+	const values: Record<SecurityLevel, number> = {
+		[SecurityLevel.NONE]: 0,
+		[SecurityLevel.LOW]: 1,
+		[SecurityLevel.MEDIUM]: 2,
+		[SecurityLevel.HIGH]: 3,
+		[SecurityLevel.CRITICAL]: 4,
+	};
 
-  return level ? values[level] : -1;
+	return level ? values[level] : -1;
 }
 
 /**
@@ -24,10 +24,10 @@ export function getSecurityLevelValue(level?: SecurityLevel): number {
  * @returns level1 > level2の場合は正の値、level1 < level2の場合は負の値、等しい場合は0
  */
 export function compareSecurityLevels(
-  level1?: SecurityLevel,
-  level2?: SecurityLevel
+	level1?: SecurityLevel,
+	level2?: SecurityLevel,
 ): number {
-  return getSecurityLevelValue(level1) - getSecurityLevelValue(level2);
+	return getSecurityLevelValue(level1) - getSecurityLevelValue(level2);
 }
 
 /**
@@ -37,44 +37,47 @@ export function compareSecurityLevels(
  * @returns より高いセキュリティレベル
  */
 export function getHigherSecurityLevel(
-  level1?: SecurityLevel,
-  level2?: SecurityLevel
+	level1?: SecurityLevel,
+	level2?: SecurityLevel,
 ): SecurityLevel {
-  if (!level1 && !level2) return SecurityLevel.MEDIUM;
-  if (!level1) return level2!;
-  if (!level2) return level1;
+	if (!level1 && !level2) return SecurityLevel.MEDIUM;
+	if (!level1) return level2!;
+	if (!level2) return level1;
 
-  return compareSecurityLevels(level1, level2) > 0 ? level1 : level2;
+	return compareSecurityLevels(level1, level2) > 0 ? level1 : level2;
 }
 
 /**
  * デフォルトのセキュリティレベル設定
  */
-export const DEFAULT_SECURITY_LEVELS: Record<SecurityLevel, {
-  requirePermission: boolean;
-  expiry?: string;
-  requireConfirmation?: boolean;
-}> = {
-  [SecurityLevel.NONE]: {
-    requirePermission: false,
-  },
-  [SecurityLevel.LOW]: {
-    requirePermission: true,
-    expiry: '24h',
-  },
-  [SecurityLevel.MEDIUM]: {
-    requirePermission: true,
-    expiry: '1h',
-  },
-  [SecurityLevel.HIGH]: {
-    requirePermission: true,
-    expiry: 'session',
-  },
-  [SecurityLevel.CRITICAL]: {
-    requirePermission: true,
-    expiry: 'once',
-    requireConfirmation: true,
-  },
+export const DEFAULT_SECURITY_LEVELS: Record<
+	SecurityLevel,
+	{
+		requirePermission: boolean;
+		expiry?: string;
+		requireConfirmation?: boolean;
+	}
+> = {
+	[SecurityLevel.NONE]: {
+		requirePermission: false,
+	},
+	[SecurityLevel.LOW]: {
+		requirePermission: true,
+		expiry: "24h",
+	},
+	[SecurityLevel.MEDIUM]: {
+		requirePermission: true,
+		expiry: "1h",
+	},
+	[SecurityLevel.HIGH]: {
+		requirePermission: true,
+		expiry: "session",
+	},
+	[SecurityLevel.CRITICAL]: {
+		requirePermission: true,
+		expiry: "once",
+		requireConfirmation: true,
+	},
 };
 
 /**
@@ -83,15 +86,15 @@ export const DEFAULT_SECURITY_LEVELS: Record<SecurityLevel, {
  * @returns 表示名
  */
 export function getSecurityLevelDisplayName(level: SecurityLevel): string {
-  const displayNames: Record<SecurityLevel, string> = {
-    [SecurityLevel.NONE]: 'None',
-    [SecurityLevel.LOW]: 'Low',
-    [SecurityLevel.MEDIUM]: 'Medium',
-    [SecurityLevel.HIGH]: 'High',
-    [SecurityLevel.CRITICAL]: 'Critical',
-  };
+	const displayNames: Record<SecurityLevel, string> = {
+		[SecurityLevel.NONE]: "None",
+		[SecurityLevel.LOW]: "Low",
+		[SecurityLevel.MEDIUM]: "Medium",
+		[SecurityLevel.HIGH]: "High",
+		[SecurityLevel.CRITICAL]: "Critical",
+	};
 
-  return displayNames[level];
+	return displayNames[level];
 }
 
 /**
@@ -100,15 +103,15 @@ export function getSecurityLevelDisplayName(level: SecurityLevel): string {
  * @returns カラーコード
  */
 export function getSecurityLevelColor(level: SecurityLevel): string {
-  const colors: Record<SecurityLevel, string> = {
-    [SecurityLevel.NONE]: '#6b7280', // gray
-    [SecurityLevel.LOW]: '#22c55e', // green
-    [SecurityLevel.MEDIUM]: '#eab308', // yellow
-    [SecurityLevel.HIGH]: '#f97316', // orange
-    [SecurityLevel.CRITICAL]: '#ef4444', // red
-  };
+	const colors: Record<SecurityLevel, string> = {
+		[SecurityLevel.NONE]: "#6b7280", // gray
+		[SecurityLevel.LOW]: "#22c55e", // green
+		[SecurityLevel.MEDIUM]: "#eab308", // yellow
+		[SecurityLevel.HIGH]: "#f97316", // orange
+		[SecurityLevel.CRITICAL]: "#ef4444", // red
+	};
 
-  return colors[level];
+	return colors[level];
 }
 
 /**
@@ -117,15 +120,17 @@ export function getSecurityLevelColor(level: SecurityLevel): string {
  * @returns 説明文
  */
 export function getSecurityLevelDescription(level: SecurityLevel): string {
-  const descriptions: Record<SecurityLevel, string> = {
-    [SecurityLevel.NONE]: 'No permission required',
-    [SecurityLevel.LOW]: 'Basic operations with minimal risk',
-    [SecurityLevel.MEDIUM]: 'Operations that may access user data or external services',
-    [SecurityLevel.HIGH]: 'Sensitive operations that require special attention',
-    [SecurityLevel.CRITICAL]: 'Critical operations that may have significant impact',
-  };
+	const descriptions: Record<SecurityLevel, string> = {
+		[SecurityLevel.NONE]: "No permission required",
+		[SecurityLevel.LOW]: "Basic operations with minimal risk",
+		[SecurityLevel.MEDIUM]:
+			"Operations that may access user data or external services",
+		[SecurityLevel.HIGH]: "Sensitive operations that require special attention",
+		[SecurityLevel.CRITICAL]:
+			"Critical operations that may have significant impact",
+	};
 
-  return descriptions[level];
+	return descriptions[level];
 }
 
 /**
@@ -134,13 +139,13 @@ export function getSecurityLevelDescription(level: SecurityLevel): string {
  * @returns セキュリティレベル
  */
 export function parseSecurityLevel(value: string): SecurityLevel {
-  const normalizedValue = value.toLowerCase();
-  
-  if (Object.values(SecurityLevel).includes(normalizedValue as SecurityLevel)) {
-    return normalizedValue as SecurityLevel;
-  }
+	const normalizedValue = value.toLowerCase();
 
-  throw new Error(`Invalid security level: ${value}`);
+	if (Object.values(SecurityLevel).includes(normalizedValue as SecurityLevel)) {
+		return normalizedValue as SecurityLevel;
+	}
+
+	throw new Error(`Invalid security level: ${value}`);
 }
 
 /**
@@ -149,5 +154,5 @@ export function parseSecurityLevel(value: string): SecurityLevel {
  * @returns 有効なセキュリティレベルかどうか
  */
 export function isValidSecurityLevel(value: any): value is SecurityLevel {
-  return Object.values(SecurityLevel).includes(value);
+	return Object.values(SecurityLevel).includes(value);
 }
