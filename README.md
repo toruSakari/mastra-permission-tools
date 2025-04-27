@@ -227,6 +227,10 @@ See the [examples](./examples) directory for complete working examples:
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
+## Relationship to Mastra
+
+This is an independent project designed to work with [Mastra](https://github.com/mastra-ai/mastra) (licensed under ELv2). This package provides additional permission control functionality and does not contain any Mastra source code. It is not officially affiliated with or endorsed by the Mastra project.
+
 ## License
 
 MIT © 2025 toruSakari

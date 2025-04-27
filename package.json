@@ -55,6 +55,7 @@
 		"zod": "^3.22.0"
 	},
 	"peerDependencies": {
+    "@mastra/core": "^0.6.3",
 		"react": "^18.0.0",
 		"react-dom": "^18.0.0"
 	},
