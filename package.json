@@ -1,5 +1,5 @@
 {
-	"name": "mastra-permission-tools",
+	"name": "@toru-sakari/mastra-permission-tools",
 	"version": "0.1.0",
 	"description": "A robust permission control system for Mastra agent tools with fine-grained access control",
 	"main": "dist/index.js",
