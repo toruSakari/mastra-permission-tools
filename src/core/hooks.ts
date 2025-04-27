@@ -28,7 +28,6 @@ export function createPermissionHooks(
 		store,
 		onPermissionRequest,
 		onPermissionGranted,
-		onPermissionDenied,
 		getIdentifier = (context) => context.resourceId || "anonymous",
 	} = options;
 
@@ -91,9 +90,6 @@ export function createPermissionHooks(
 		},
 
 		afterExecution: async (toolName, result, context) => {
-			// 実行後の処理
-			const identifier = getIdentifier(context);
-
 			// 許可が付与されたことをコールバックで通知
 			if (onPermissionGranted) {
 				onPermissionGranted(toolName, context);
@@ -102,7 +98,7 @@ export function createPermissionHooks(
 			return result;
 		},
 
-		onError: async (toolName, error, context) => {
+		onError: async (toolName, error) => {
 			// エラー処理
 			console.error(`Tool execution error for ${toolName}:`, error);
 
