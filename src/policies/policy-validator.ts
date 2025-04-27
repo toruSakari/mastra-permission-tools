@@ -197,23 +197,19 @@ export function calculatePolicyDiff(
  * セキュリティポリシーを安全な形式に正規化する
  * @param policy ポリシー
  */
-export function normalizeSecurityPolicy(policy: Partial<SecurityPolicy>): SecurityPolicy {
-  const normalizedPolicy: SecurityPolicy = {
+export function normalizeSecurityPolicy(policy: Partial<SecurityPolicy>) {
+  const normalizedPolicy = {
     tools: policy.tools || {},
     categories: policy.categories || {},
-    defaults: policy.defaults || {},
+    defaults: {...{
+      [SecurityLevel.NONE]: { requirePermission: false },
+      [SecurityLevel.LOW]: { requirePermission: true, expiry: '1h' },
+      [SecurityLevel.MEDIUM]: { requirePermission: true, expiry: '30m' },
+      [SecurityLevel.HIGH]: { requirePermission: true, expiry: 'once', requireConfirmation: true },
+      [SecurityLevel.CRITICAL]: { requirePermission: true, expiry: 'once', requireConfirmation: true },
+    }, ...policy.defaults},
     parameterRules: policy.parameterRules || {},
   };
-
-  // デフォルト値で欠けているセキュリティレベルを補完
-  for (const level of Object.values(SecurityLevel)) {
-    if (!normalizedPolicy.defaults[level]) {
-      normalizedPolicy.defaults[level] = {
-        requirePermission: level !== SecurityLevel.NONE,
-        expiry: level === SecurityLevel.CRITICAL ? 'once' : '1h',
-      };
-    }
-  }
 
   return normalizedPolicy;
 }

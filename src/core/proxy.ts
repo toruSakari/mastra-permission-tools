@@ -56,7 +56,7 @@ function createProxiedTool(
         const beforeResult = await hooks.beforeExecution(
           name,
           params.context,
-          params.runtimeContext || {}
+          params.mastra || {}
         );
 
         // 続行が許可されていない場合は早期リターン
@@ -66,6 +66,10 @@ function createProxiedTool(
           };
         }
 
+        if (!tool.execute) {
+          throw new Error(`Tool ${name} does not have an execute method`);
+        }
+
         // 実際のツールを実行
         const result = await tool.execute(params);
 
@@ -73,14 +77,14 @@ function createProxiedTool(
         return await hooks.afterExecution(
           name,
           result,
-          params.runtimeContext || {}
+          params.mastra || {}
         );
       } catch (error) {
         // エラーフック
         return await hooks.onError(
           name,
           error as Error,
-          params.runtimeContext || {}
+          params.mastra || {}
         );
       }
     },

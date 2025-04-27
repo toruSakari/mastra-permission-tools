@@ -16,3 +16,10 @@ export interface ParameterRule {
   securityLevel?: SecurityLevel;
   message?: string;
 }
+
+/**
+ * ツール名を含むパラメータルール
+ */
+export interface ParameterRuleWithTool extends ParameterRule {
+  toolName?: string;
+}

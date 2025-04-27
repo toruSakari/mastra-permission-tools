@@ -45,7 +45,8 @@ describe('proxy', () => {
     it('should handle permission denied', async () => {
       const tool = createMockTool('test');
       const hooks = createMockHooks();
-      hooks.beforeExecution.mockResolvedValue({ continue: false, response: { denied: true } });
+
+      hooks.beforeExecution = vi.fn().mockResolvedValue({ continue: false, response: { denied: true } });
       
       const proxiedTools = createToolExecutionProxy({ test: tool }, hooks);
       
@@ -86,7 +87,7 @@ describe('proxy', () => {
       const hooks1 = createMockHooks();
       const hooks2 = createMockHooks();
       
-      hooks1.beforeExecution.mockResolvedValue({ continue: false });
+      hooks1.beforeExecution = vi.fn().mockResolvedValue({ continue: false });
       
       const chained = chainProxyHooks(hooks1, hooks2);
       

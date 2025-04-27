@@ -4,7 +4,7 @@ import { CommonParameterRules } from '../rules/parameter-rules';
 /**
  * デフォルトのセキュリティポリシー
  */
-export const defaultSecurityPolicy: SecurityPolicy = {
+export const defaultSecurityPolicy = {
   tools: {},
   categories: {
     'internal': { securityLevel: SecurityLevel.NONE },
@@ -35,14 +35,13 @@ export const defaultSecurityPolicy: SecurityPolicy = {
       expiry: 'once',
       requireConfirmation: true,
     },
-  },
+  } ,
   parameterRules: {},
-};
-
+} satisfies SecurityPolicy;
 /**
  * 開発環境用のセキュリティポリシー
  */
-export const developmentSecurityPolicy: SecurityPolicy = {
+export const developmentSecurityPolicy = {
   ...defaultSecurityPolicy,
   defaults: {
     ...defaultSecurityPolicy.defaults,
@@ -56,12 +55,12 @@ export const developmentSecurityPolicy: SecurityPolicy = {
       requireConfirmation: true,
     },
   },
-};
+} satisfies SecurityPolicy;
 
 /**
  * 制限的なセキュリティポリシー
  */
-export const restrictiveSecurityPolicy: SecurityPolicy = {
+export const restrictiveSecurityPolicy = {
   ...defaultSecurityPolicy,
   defaults: {
     [SecurityLevel.NONE]: {
@@ -86,7 +85,7 @@ export const restrictiveSecurityPolicy: SecurityPolicy = {
       requireConfirmation: true,
     },
   },
-};
+} satisfies SecurityPolicy;
 
 /**
  * カスタムポリシーを作成するヘルパー関数

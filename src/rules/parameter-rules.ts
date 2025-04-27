@@ -1,4 +1,4 @@
-import { ParameterRule } from '../types/rules';
+import { ParameterRule, ParameterRuleWithTool } from '../types/rules';
 import { SecurityLevel } from '../types/security';
 import { RuleFactory } from './rule-evaluator';
 
@@ -93,13 +93,15 @@ export const CommonParameterRules = {
  * ルールセットを作成するユーティリティ関数
  * @param rules ルールの配列
  */
-export function createRuleSet(rules: ParameterRule[]): Record<string, ParameterRule[]> {
+export function createRuleSet(rules: ParameterRuleWithTool[]): Record<string, ParameterRule[]> {
   return rules.reduce((acc, rule) => {
     const toolName = rule.toolName || 'default';
     if (!acc[toolName]) {
       acc[toolName] = [];
     }
-    acc[toolName].push(rule);
+    // toolNameを除いた元のParameterRuleを追加
+    const { toolName: _, ...baseRule } = rule;
+    acc[toolName].push(baseRule);
     return acc;
   }, {} as Record<string, ParameterRule[]>);
 }

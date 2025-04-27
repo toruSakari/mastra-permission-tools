@@ -112,6 +112,7 @@ describe('policy-validator', () => {
         tools: { Tool1: { securityLevel: SecurityLevel.LOW } },
         categories: { cat1: { securityLevel: SecurityLevel.LOW } },
         defaults: {
+          ...validPolicy.defaults,
           [SecurityLevel.LOW]: { requirePermission: true },
         },
       };
@@ -120,6 +121,7 @@ describe('policy-validator', () => {
         tools: { Tool2: { securityLevel: SecurityLevel.HIGH } },
         categories: { cat2: { securityLevel: SecurityLevel.HIGH } },
         defaults: {
+          ...validPolicy.defaults,
           [SecurityLevel.HIGH]: { requirePermission: true },
         },
       };
@@ -232,7 +234,7 @@ describe('policy-validator', () => {
     });
 
     it('should preserve existing values', () => {
-      const partialPolicy: Partial<SecurityPolicy> = {
+      const partialPolicy = {
         tools: { TestTool: { securityLevel: SecurityLevel.HIGH } },
         defaults: {
           [SecurityLevel.LOW]: { requirePermission: false },

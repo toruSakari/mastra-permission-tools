@@ -50,7 +50,11 @@ export function getHigherSecurityLevel(
 /**
  * デフォルトのセキュリティレベル設定
  */
-export const DEFAULT_SECURITY_LEVELS = {
+export const DEFAULT_SECURITY_LEVELS: Record<SecurityLevel, {
+  requirePermission: boolean;
+  expiry?: string;
+  requireConfirmation?: boolean;
+}> = {
   [SecurityLevel.NONE]: {
     requirePermission: false,
   },
@@ -71,7 +75,7 @@ export const DEFAULT_SECURITY_LEVELS = {
     expiry: 'once',
     requireConfirmation: true,
   },
-} as const;
+};
 
 /**
  * セキュリティレベルの表示名を取得する
