@@ -15,15 +15,17 @@ export type ProxiedTool = Tool & {
  * @param originalTools 元のツール群
  * @param hooks プロキシフック
  */
-export function createToolExecutionProxy(
-	originalTools: Record<string, Tool>,
+export function createToolExecutionProxy<T extends Record<string, Tool>>(
+	originalTools: T,
 	hooks: ProxyHooks,
-): Record<string, ProxiedTool> {
-	const proxiedTools: Record<string, ProxiedTool> = {};
-
-	for (const [name, tool] of Object.entries(originalTools)) {
-		proxiedTools[name] = createProxiedTool(name, tool, hooks);
-	}
+): T {
+	// 空のオブジェクトを作成し、後で同じキーを持つプロパティで埋める
+	const proxiedTools = Object.fromEntries(
+			Object.entries(originalTools).map(([name, tool]) => [
+					name,
+					createProxiedTool(name, tool, hooks)
+			])
+	) as T;
 
 	return proxiedTools;
 }

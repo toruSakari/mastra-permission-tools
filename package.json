@@ -51,11 +51,10 @@
 	},
 	"homepage": "https://github.com/toruSakari/mastra-permission-tools#readme",
 	"dependencies": {
-		"@mastra/core": "^0.6.3",
+		"@mastra/core": "^0.6.4",
 		"zod": "^3.22.0"
 	},
 	"peerDependencies": {
-    "@mastra/core": "^0.6.3",
 		"react": "^18.0.0",
 		"react-dom": "^18.0.0"
 	},

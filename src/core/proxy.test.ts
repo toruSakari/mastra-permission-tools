@@ -36,7 +36,7 @@ describe("proxy", () => {
 
 			const proxiedTools = createToolExecutionProxy({ test: tool }, hooks);
 
-			await proxiedTools.test.execute({ context: { param: "value" } });
+			await proxiedTools.test.execute!({ context: { param: "value" } });
 
 			expect(hooks.beforeExecution).toHaveBeenCalledWith(
 				"test",
@@ -71,7 +71,7 @@ describe("proxy", () => {
 
 			const proxiedTools = createToolExecutionProxy({ test: tool }, hooks);
 
-			const result = await proxiedTools.test.execute({ context: {} });
+			const result = await proxiedTools.test.execute!({ context: {} });
 
 			expect(result).toEqual({ denied: true });
 			expect(tool.execute).not.toHaveBeenCalled();
@@ -84,7 +84,7 @@ describe("proxy", () => {
 
 			const proxiedTools = createToolExecutionProxy({ test: tool }, hooks);
 
-			const result = await proxiedTools.test.execute({ context: {} });
+			const result = await proxiedTools.test.execute!({ context: {} });
 
 			expect(hooks.onError).toHaveBeenCalled();
 			expect(result).toEqual({ error: "test error" });

@@ -25,7 +25,12 @@ pnpm add mastra-permission-tools
 ## Quick Start
 
 ```typescript
-import { createToolExecutionProxy, createPermissionHooks } from 'mastra-permission-tools';
+import { 
+  createToolExecutionProxy,
+  createPermissionHooks, 
+  createPermissionTools,
+  MemoryPermissionStore 
+} from 'mastra-permission-tools';
 import { Agent } from '@mastra/core/agent';
 
 // Define your security policy
@@ -41,16 +46,29 @@ const securityPolicy = {
   }
 };
 
+// Create a permission store
+const permissionStore = new MemoryPermissionStore();
+
 // Create permission hooks
-const permissionHooks = createPermissionHooks(securityPolicy);
+const permissionHooks = createPermissionHooks(securityPolicy, {
+  store: permissionStore
+});
 
 // Wrap your tools with the permission proxy
 const proxiedTools = createToolExecutionProxy(originalTools, permissionHooks);
 
+// Create permission response tools
+const permissionTools = createPermissionTools(securityPolicy, {
+  store: permissionStore
+});
+
 // Configure your agent
 const agent = new Agent({
   name: "SecureAgent",
-  tools: proxiedTools
+  tools: {
+    ...proxiedTools,
+    ...permissionTools 
+  }
 });
 ```
 
@@ -105,7 +123,25 @@ const parameterRules = {
 };
 ```
 
-### 3. React Integration
+### 3. Set Up Permission Response Tools
+
+```typescript
+// Create permission tools
+const permissionTools = createPermissionTools(securityPolicy, {
+  store: permissionStore
+});
+
+// Add to your agent
+const agent = new Agent({
+  name: "SecureAgent",
+  tools: {
+    ...proxiedTools,
+    ...permissionTools
+  }
+});
+```
+
+### 4. React Integration
 
 Use the provided React components for permission dialogs:
 
@@ -166,13 +202,13 @@ Track all permission requests and decisions:
 
 ```typescript
 const hooks = createPermissionHooks(securityPolicy, {
-  onPermissionRequest: (toolName, params, userId) => {
+  onPermissionRequest: (toolName, params, context) => {
     // Log permission request
   },
-  onPermissionGranted: (toolName, userId) => {
+  onPermissionGranted: (toolName, context) => {
     // Log permission grant
   },
-  onPermissionDenied: (toolName, userId) => {
+  onPermissionDenied: (toolName, context) => {
     // Log permission denial
   }
 });
@@ -187,6 +223,12 @@ Creates a proxy wrapper for tools with permission checks.
 
 #### `createPermissionHooks(securityPolicy, options?)`
 Creates hook functions for permission control based on the security policy.
+
+#### `createPermissionTools(securityPolicy, options?)`
+Creates a set of tools for handling permission responses. Returns:
+- `respondToPermission`: Tool to process user permission responses
+- `checkPermissionStatus`: Tool to check the current permission status for a tool
+- `clearPermission`: Tool to clear permission for a specific tool
 
 ### React Components
 
