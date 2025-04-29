@@ -1,6 +1,6 @@
 {
 	"name": "@toru-sakari/mastra-permission-tools",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "A robust permission control system for Mastra agent tools with fine-grained access control",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
@@ -17,7 +17,11 @@
 			"require": "./dist/react/index.js"
 		}
 	},
-	"files": ["dist", "README.md", "LICENSE"],
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
 	"scripts": {
 		"build": "tsup",
 		"dev": "tsup --watch",
