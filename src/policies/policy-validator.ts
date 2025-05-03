@@ -1,4 +1,4 @@
-import { SecurityPolicy, SecurityLevel } from "../types/security";
+import { SecurityPolicy, SecurityLevelEnum } from "../types/security";
 import { validateRule } from "../rules/rule-evaluator";
 import { isValidSecurityLevel } from "../core/security-levels";
 
@@ -52,7 +52,7 @@ export function validateSecurityPolicy(
 				);
 			}
 
-			if (metadata.category && !policy.categories[metadata.category]) {
+			if (metadata.category && !policy.categories?.[metadata.category]) {
 				warnings.push(
 					`Tool "${toolName}" references undefined category: ${metadata.category}`,
 				);
@@ -74,7 +74,7 @@ export function validateSecurityPolicy(
 	// デフォルト設定のバリデーション
 	if (policy.defaults) {
 		// すべてのセキュリティレベルが定義されているか確認
-		for (const level of Object.values(SecurityLevel)) {
+		for (const level of Object.values(SecurityLevelEnum)) {
 			if (!policy.defaults[level]) {
 				warnings.push(
 					`Missing default configuration for security level: ${level}`,
@@ -84,7 +84,7 @@ export function validateSecurityPolicy(
 
 		// 各デフォルト設定のバリデーション
 		for (const [level, config] of Object.entries(policy.defaults)) {
-			if (!isValidSecurityLevel(level as SecurityLevel)) {
+			if (!isValidSecurityLevel(level)) {
 				errors.push(`Invalid security level in defaults: ${level}`);
 			}
 
@@ -220,15 +220,15 @@ export function normalizeSecurityPolicy(policy: Partial<SecurityPolicy>) {
 		categories: policy.categories || {},
 		defaults: {
 			...{
-				[SecurityLevel.NONE]: { requirePermission: false },
-				[SecurityLevel.LOW]: { requirePermission: true, expiry: "1h" },
-				[SecurityLevel.MEDIUM]: { requirePermission: true, expiry: "30m" },
-				[SecurityLevel.HIGH]: {
+				none: { requirePermission: false },
+				low: { requirePermission: true, expiry: "1h" },
+				medium: { requirePermission: true, expiry: "30m" },
+				high: {
 					requirePermission: true,
 					expiry: "once",
 					requireConfirmation: true,
 				},
-				[SecurityLevel.CRITICAL]: {
+				critical: {
 					requirePermission: true,
 					expiry: "once",
 					requireConfirmation: true,
@@ -237,7 +237,7 @@ export function normalizeSecurityPolicy(policy: Partial<SecurityPolicy>) {
 			...policy.defaults,
 		},
 		parameterRules: policy.parameterRules || {},
-	};
+	} satisfies SecurityPolicy;
 
 	return normalizedPolicy;
 }

@@ -129,7 +129,7 @@ export const RuleFactory = {
 	 */
 	amountGreaterThan: (
 		threshold: number,
-		securityLevel: SecurityLevel = SecurityLevel.HIGH,
+		securityLevel: SecurityLevel = "high",
 		message?: string,
 	): ParameterRule => {
 		return createRule("amount", "greaterThan", threshold, {
@@ -143,7 +143,7 @@ export const RuleFactory = {
 	 */
 	domainContains: (
 		domain: string,
-		securityLevel: SecurityLevel = SecurityLevel.HIGH,
+		securityLevel: SecurityLevel = "high",
 		message?: string,
 	): ParameterRule => {
 		return createRule("domain", "contains", domain, {
@@ -158,7 +158,7 @@ export const RuleFactory = {
 	patternMatches: (
 		param: string,
 		pattern: string,
-		securityLevel: SecurityLevel = SecurityLevel.HIGH,
+		securityLevel: SecurityLevel = "high",
 		message?: string,
 	): ParameterRule => {
 		return createRule(param, "regex", pattern, {
@@ -173,7 +173,7 @@ export const RuleFactory = {
 	arrayLengthGreaterThan: (
 		param: string,
 		threshold: number,
-		securityLevel: SecurityLevel = SecurityLevel.HIGH,
+		securityLevel: SecurityLevel = "high",
 		message?: string,
 	): ParameterRule => {
 		return {

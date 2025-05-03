@@ -15,19 +15,19 @@ describe("policy-validator", () => {
 		validPolicy = {
 			tools: {
 				TestTool: {
-					securityLevel: SecurityLevel.MEDIUM,
+					securityLevel: 'medium',
 					category: "test",
 				},
 			},
 			categories: {
-				test: { securityLevel: SecurityLevel.LOW },
+				test: { securityLevel: 'low' },
 			},
 			defaults: {
-				[SecurityLevel.NONE]: { requirePermission: false },
-				[SecurityLevel.LOW]: { requirePermission: true, expiry: "1h" },
-				[SecurityLevel.MEDIUM]: { requirePermission: true, expiry: "30m" },
-				[SecurityLevel.HIGH]: { requirePermission: true, expiry: "once" },
-				[SecurityLevel.CRITICAL]: { requirePermission: true, expiry: "once" },
+				['none']: { requirePermission: false },
+				['low']: { requirePermission: true, expiry: "1h" },
+				['medium']: { requirePermission: true, expiry: "30m" },
+				['high']: { requirePermission: true, expiry: "once" },
+				['critical']: { requirePermission: true, expiry: "once" },
 			},
 		};
 	});
@@ -93,7 +93,7 @@ describe("policy-validator", () => {
 				...validPolicy,
 				defaults: {
 					...validPolicy.defaults,
-					[SecurityLevel.LOW]: { requirePermission: true, expiry: "invalid" },
+					['low']: { requirePermission: true, expiry: "invalid" },
 				},
 			};
 
@@ -123,20 +123,20 @@ describe("policy-validator", () => {
 	describe("mergeSecurityPolicies", () => {
 		it("should merge two policies correctly", () => {
 			const policy1: SecurityPolicy = {
-				tools: { Tool1: { securityLevel: SecurityLevel.LOW } },
-				categories: { cat1: { securityLevel: SecurityLevel.LOW } },
+				tools: { Tool1: { securityLevel: 'low' } },
+				categories: { cat1: { securityLevel: 'low' } },
 				defaults: {
 					...validPolicy.defaults,
-					[SecurityLevel.LOW]: { requirePermission: true },
+					['low']: { requirePermission: true },
 				},
 			};
 
 			const policy2: SecurityPolicy = {
-				tools: { Tool2: { securityLevel: SecurityLevel.HIGH } },
-				categories: { cat2: { securityLevel: SecurityLevel.HIGH } },
+				tools: { Tool2: { securityLevel: 'high' } },
+				categories: { cat2: { securityLevel: 'high' } },
 				defaults: {
 					...validPolicy.defaults,
-					[SecurityLevel.HIGH]: { requirePermission: true },
+					['high']: { requirePermission: true },
 				},
 			};
 
@@ -144,42 +144,42 @@ describe("policy-validator", () => {
 
 			expect(merged.tools.Tool1).toBeDefined();
 			expect(merged.tools.Tool2).toBeDefined();
-			expect(merged.categories.cat1).toBeDefined();
-			expect(merged.categories.cat2).toBeDefined();
-			expect(merged.defaults[SecurityLevel.LOW]).toBeDefined();
-			expect(merged.defaults[SecurityLevel.HIGH]).toBeDefined();
+			expect(merged.categories!.cat1).toBeDefined();
+			expect(merged.categories!.cat2).toBeDefined();
+			expect(merged.defaults['low']).toBeDefined();
+			expect(merged.defaults['high']).toBeDefined();
 		});
 
 		it("should override values from first policy with second", () => {
 			const policy1: SecurityPolicy = {
-				tools: { Tool1: { securityLevel: SecurityLevel.LOW } },
+				tools: { Tool1: { securityLevel: 'low' } },
 				categories: {},
 				defaults: {},
 			};
 
 			const policy2: SecurityPolicy = {
-				tools: { Tool1: { securityLevel: SecurityLevel.HIGH } },
+				tools: { Tool1: { securityLevel: 'high' } },
 				categories: {},
 				defaults: {},
 			};
 
 			const merged = mergeSecurityPolicies(policy1, policy2);
-			expect(merged.tools.Tool1.securityLevel).toBe(SecurityLevel.HIGH);
+			expect(merged.tools.Tool1.securityLevel).toBe('high');
 		});
 	});
 
 	describe("calculatePolicyDiff", () => {
 		it("should detect added tools", () => {
 			const original: SecurityPolicy = {
-				tools: { Tool1: { securityLevel: SecurityLevel.LOW } },
+				tools: { Tool1: { securityLevel: 'low' } },
 				categories: {},
 				defaults: {},
 			};
 
 			const current: SecurityPolicy = {
 				tools: {
-					Tool1: { securityLevel: SecurityLevel.LOW },
-					Tool2: { securityLevel: SecurityLevel.HIGH },
+					Tool1: { securityLevel: 'low' },
+					Tool2: { securityLevel: 'high' },
 				},
 				categories: {},
 				defaults: {},
@@ -194,15 +194,15 @@ describe("policy-validator", () => {
 		it("should detect removed tools", () => {
 			const original: SecurityPolicy = {
 				tools: {
-					Tool1: { securityLevel: SecurityLevel.LOW },
-					Tool2: { securityLevel: SecurityLevel.HIGH },
+					Tool1: { securityLevel: 'low' },
+					Tool2: { securityLevel: 'high' },
 				},
 				categories: {},
 				defaults: {},
 			};
 
 			const current: SecurityPolicy = {
-				tools: { Tool1: { securityLevel: SecurityLevel.LOW } },
+				tools: { Tool1: { securityLevel: 'low' } },
 				categories: {},
 				defaults: {},
 			};
@@ -215,13 +215,13 @@ describe("policy-validator", () => {
 
 		it("should detect modified tools", () => {
 			const original: SecurityPolicy = {
-				tools: { Tool1: { securityLevel: SecurityLevel.LOW } },
+				tools: { Tool1: { securityLevel: 'low' } },
 				categories: {},
 				defaults: {},
 			};
 
 			const current: SecurityPolicy = {
-				tools: { Tool1: { securityLevel: SecurityLevel.HIGH } },
+				tools: { Tool1: { securityLevel: 'high' } },
 				categories: {},
 				defaults: {},
 			};
@@ -243,22 +243,22 @@ describe("policy-validator", () => {
 			const normalized = normalizeSecurityPolicy(partialPolicy);
 
 			expect(normalized.defaults).toBeDefined();
-			expect(normalized.defaults[SecurityLevel.NONE]).toBeDefined();
-			expect(normalized.defaults[SecurityLevel.CRITICAL]).toBeDefined();
+			expect(normalized.defaults['none']).toBeDefined();
+			expect(normalized.defaults['critical']).toBeDefined();
 		});
 
 		it("should preserve existing values", () => {
 			const partialPolicy = {
-				tools: { TestTool: { securityLevel: SecurityLevel.HIGH } },
+				tools: { TestTool: { securityLevel: 'high' } },
 				defaults: {
-					[SecurityLevel.LOW]: { requirePermission: false },
+					['low']: { requirePermission: false },
 				},
-			};
+			} satisfies SecurityPolicy;
 
 			const normalized = normalizeSecurityPolicy(partialPolicy);
 
-			expect(normalized.tools.TestTool.securityLevel).toBe(SecurityLevel.HIGH);
-			expect(normalized.defaults[SecurityLevel.LOW].requirePermission).toBe(
+			expect(normalized.tools.TestTool.securityLevel).toBe('high');
+			expect(normalized.defaults['low'].requirePermission).toBe(
 				false,
 			);
 		});

@@ -10,18 +10,9 @@
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.mjs",
 			"require": "./dist/index.js"
-		},
-		"./react": {
-			"types": "./dist/react/index.d.ts",
-			"import": "./dist/react/index.mjs",
-			"require": "./dist/react/index.js"
 		}
 	},
-	"files": [
-		"dist",
-		"README.md",
-		"LICENSE"
-	],
+	"files": ["dist", "README.md", "LICENSE"],
 	"scripts": {
 		"build": "tsup",
 		"dev": "tsup --watch",
@@ -41,7 +32,7 @@
 		"security",
 		"access-control",
 		"tools",
-		"react",
+		"ai",
 		"typescript"
 	],
 	"author": "toruSakari",
@@ -56,40 +47,20 @@
 	"homepage": "https://github.com/toruSakari/mastra-permission-tools#readme",
 	"dependencies": {
 		"@mastra/core": "^0.6.4",
+		"pg": "^8.15.6",
 		"zod": "^3.22.0"
-	},
-	"peerDependencies": {
-		"react": "^18.0.0",
-		"react-dom": "^18.0.0"
-	},
-	"peerDependenciesMeta": {
-		"react": {
-			"optional": true
-		},
-		"react-dom": {
-			"optional": true
-		}
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@changesets/cli": "^2.27.1",
-		"@testing-library/jest-dom": "^6.6.3",
-		"@testing-library/react": "^16.3.0",
 		"@types/node": "^20.11.24",
-		"@types/react": "^18.2.64",
-		"@types/react-dom": "^18.2.21",
 		"@typescript-eslint/eslint-plugin": "^7.1.1",
 		"@typescript-eslint/parser": "^7.1.1",
-		"@vitejs/plugin-react": "^4.4.1",
 		"@vitest/coverage-v8": "^1.3.1",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-react": "^7.34.0",
-		"eslint-plugin-react-hooks": "^4.6.0",
 		"jsdom": "^26.1.0",
 		"prettier": "^3.2.5",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
 		"rimraf": "^5.0.5",
 		"tsup": "^8.0.2",
 		"typescript": "^5.3.3",

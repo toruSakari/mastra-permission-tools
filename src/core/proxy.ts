@@ -21,10 +21,10 @@ export function createToolExecutionProxy<T extends Record<string, Tool>>(
 ): T {
 	// 空のオブジェクトを作成し、後で同じキーを持つプロパティで埋める
 	const proxiedTools = Object.fromEntries(
-			Object.entries(originalTools).map(([name, tool]) => [
-					name,
-					createProxiedTool(name, tool, hooks)
-			])
+		Object.entries(originalTools).map(([name, tool]) => [
+			name,
+			createProxiedTool(name, tool, hooks),
+		]),
 	) as T;
 
 	return proxiedTools;

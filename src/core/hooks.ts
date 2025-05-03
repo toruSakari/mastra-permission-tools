@@ -1,6 +1,6 @@
 import { ProxyHooks, PermissionResponse } from "../types/proxy";
-import { SecurityPolicy, SecurityLevel } from "../types/security";
-import { IPermissionStore, generatePermissionKey } from "./store";
+import { SecurityPolicy, SecurityLevel, ToolMetadata } from "../types/security";
+import { IPermissionStore, generatePermissionKey } from "../storage/interfaces";
 import {
 	compareSecurityLevels,
 	DEFAULT_SECURITY_LEVELS,
@@ -117,7 +117,7 @@ export function createPermissionHooks(
  */
 function determineSecurityLevel(
 	toolName: string,
-	metadata: Record<string, any>,
+	metadata: ToolMetadata,
 	params: any,
 	securityPolicy: SecurityPolicy,
 ): SecurityLevel {
@@ -125,7 +125,7 @@ function determineSecurityLevel(
 
 	// メタデータにレベルがない場合はカテゴリから判断
 	if (!securityLevel && metadata.category) {
-		const categoryPolicy = securityPolicy.categories[metadata.category];
+		const categoryPolicy = securityPolicy.categories?.[metadata.category];
 		securityLevel = categoryPolicy?.securityLevel;
 	}
 
@@ -148,7 +148,7 @@ function determineSecurityLevel(
 	}
 
 	// デフォルトはMEDIUM
-	return securityLevel || SecurityLevel.MEDIUM;
+	return securityLevel || "medium";
 }
 
 /**

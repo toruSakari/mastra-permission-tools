@@ -1,4 +1,4 @@
-import { SecurityPolicy, SecurityLevel } from "../types/security";
+import { SecurityPolicy } from "../types/security";
 import { CommonParameterRules } from "../rules/parameter-rules";
 
 /**
@@ -7,30 +7,30 @@ import { CommonParameterRules } from "../rules/parameter-rules";
 export const defaultSecurityPolicy = {
 	tools: {},
 	categories: {
-		internal: { securityLevel: SecurityLevel.NONE },
-		read: { securityLevel: SecurityLevel.LOW },
-		write: { securityLevel: SecurityLevel.MEDIUM },
-		external: { securityLevel: SecurityLevel.MEDIUM },
-		financial: { securityLevel: SecurityLevel.HIGH },
-		admin: { securityLevel: SecurityLevel.CRITICAL },
+		internal: { securityLevel: "none" },
+		read: { securityLevel: "low" },
+		write: { securityLevel: "medium" },
+		external: { securityLevel: "medium" },
+		financial: { securityLevel: "high" },
+		admin: { securityLevel: "critical" },
 	},
 	defaults: {
-		[SecurityLevel.NONE]: {
+		none: {
 			requirePermission: false,
 		},
-		[SecurityLevel.LOW]: {
+		low: {
 			requirePermission: true,
 			expiry: "24h",
 		},
-		[SecurityLevel.MEDIUM]: {
+		medium: {
 			requirePermission: true,
 			expiry: "1h",
 		},
-		[SecurityLevel.HIGH]: {
+		high: {
 			requirePermission: true,
 			expiry: "session",
 		},
-		[SecurityLevel.CRITICAL]: {
+		critical: {
 			requirePermission: true,
 			expiry: "once",
 			requireConfirmation: true,
@@ -45,11 +45,11 @@ export const developmentSecurityPolicy = {
 	...defaultSecurityPolicy,
 	defaults: {
 		...defaultSecurityPolicy.defaults,
-		[SecurityLevel.HIGH]: {
+		high: {
 			requirePermission: true,
 			expiry: "24h", // 開発中は長めの有効期限
 		},
-		[SecurityLevel.CRITICAL]: {
+		critical: {
 			requirePermission: true,
 			expiry: "1h", // 開発中はCRITICALでも1時間有効
 			requireConfirmation: true,
@@ -63,23 +63,23 @@ export const developmentSecurityPolicy = {
 export const restrictiveSecurityPolicy = {
 	...defaultSecurityPolicy,
 	defaults: {
-		[SecurityLevel.NONE]: {
+		none: {
 			requirePermission: false,
 		},
-		[SecurityLevel.LOW]: {
+		low: {
 			requirePermission: true,
 			expiry: "1h",
 		},
-		[SecurityLevel.MEDIUM]: {
+		medium: {
 			requirePermission: true,
 			expiry: "30m",
 		},
-		[SecurityLevel.HIGH]: {
+		high: {
 			requirePermission: true,
 			expiry: "once",
 			requireConfirmation: true,
 		},
-		[SecurityLevel.CRITICAL]: {
+		critical: {
 			requirePermission: true,
 			expiry: "once",
 			requireConfirmation: true,
@@ -121,14 +121,15 @@ export function createCustomPolicy(
  */
 export const commonToolPolicies = {
 	databaseAccess: {
+		...defaultSecurityPolicy,
 		tools: {
 			QueryDatabase: {
-				securityLevel: SecurityLevel.MEDIUM,
+				securityLevel: "medium",
 				category: "data",
 				permissionMessage: "Database access required for data retrieval",
 			},
 			UpdateDatabase: {
-				securityLevel: SecurityLevel.HIGH,
+				securityLevel: "high",
 				category: "data",
 				permissionMessage: "Database modification requires approval",
 			},
@@ -140,19 +141,20 @@ export const commonToolPolicies = {
 	},
 
 	fileOperations: {
+		...defaultSecurityPolicy,
 		tools: {
 			ReadFile: {
-				securityLevel: SecurityLevel.LOW,
+				securityLevel: "low",
 				category: "read",
 				permissionMessage: "File read access required",
 			},
 			WriteFile: {
-				securityLevel: SecurityLevel.MEDIUM,
+				securityLevel: "medium",
 				category: "write",
 				permissionMessage: "File write access required",
 			},
 			DeleteFile: {
-				securityLevel: SecurityLevel.HIGH,
+				securityLevel: "high",
 				category: "write",
 				permissionMessage: "File deletion requires approval",
 			},
@@ -164,14 +166,15 @@ export const commonToolPolicies = {
 	},
 
 	apiOperations: {
+		...defaultSecurityPolicy,
 		tools: {
 			FetchAPI: {
-				securityLevel: SecurityLevel.LOW,
+				securityLevel: "low",
 				category: "external",
 				permissionMessage: "External API call requires permission",
 			},
 			PostAPI: {
-				securityLevel: SecurityLevel.MEDIUM,
+				securityLevel: "medium",
 				category: "external",
 				permissionMessage: "External API modification requires approval",
 			},
@@ -184,4 +187,4 @@ export const commonToolPolicies = {
 			],
 		},
 	},
-};
+} satisfies Record<string, SecurityPolicy>;

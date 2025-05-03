@@ -8,9 +8,9 @@ A TypeScript/JavaScript library that provides a robust permission control system
 - 🎯 **Fine-grained Control**: Parameter-based permission rules for precise access control
 - 🔄 **Tool Proxy Pattern**: Transparent proxy wrapper for seamless permission integration
 - ⏰ **Permission Expiration**: Time-based permission grants with configurable expiration
-- 🎨 **UI Components**: Ready-to-use React components for permission dialogs
 - 📝 **Audit Trail**: Built-in logging and tracking of permission requests and grants
 - 🔧 **Extensible**: Easy to customize for specific use cases and requirements
+- 💾 **Multiple Storage Options**: Built-in support for in-memory and PostgreSQL storage
 
 ## Installation
 
@@ -44,7 +44,7 @@ const securityPolicy = {
   defaults: {
     high: { requirePermission: true, expiry: "session" }
   }
-};
+} satisfies SecurityPolicy;
 
 // Create a permission store
 const permissionStore = new MemoryPermissionStore();
@@ -141,39 +141,35 @@ const agent = new Agent({
 });
 ```
 
-### 4. React Integration
+### 4. Persistent Storage with PostgreSQL
 
-Use the provided React components for permission dialogs:
+Use PostgreSQL for persistent permission storage:
 
 ```typescript
-import { usePermissionDialog } from 'mastra-permission-tools/react';
+import { PgPermissionStore } from 'mastra-permission-tools';
 
-function ChatComponent() {
-  const { PermissionDialogComponent, requestPermission } = usePermissionDialog();
-  
-  // Handle tool execution with permission checks
-  const handleToolCall = async (toolCall) => {
-    if (toolCall.requiresPermission) {
-      const approved = await requestPermission(
-        toolCall.toolName,
-        toolCall.reason,
-        toolCall.securityLevel
-      );
-      
-      if (!approved) return null;
-    }
-    
-    // Execute approved tool
-    return await executeToolCall(toolCall);
-  };
-  
-  return (
-    <div>
-      {/* Your chat UI */}
-      {PermissionDialogComponent}
-    </div>
-  );
-}
+// Create a PostgreSQL store
+const permissionStore = new PgPermissionStore({
+  pgConfig: {
+    host: process.env.POSTGRES_HOST || 'localhost',
+    port: parseInt(process.env.POSTGRES_PORT || '5432'),
+    database: process.env.POSTGRES_DB || 'mastra',
+    user: process.env.POSTGRES_USER || 'postgres',
+    password: process.env.POSTGRES_PASSWORD || 'postgres'
+  },
+  tableName: 'agent_permissions',
+  autoCreateTable: true
+});
+
+// Create hooks with the PostgreSQL store
+const permissionHooks = createPermissionHooks(securityPolicy, {
+  store: permissionStore
+});
+
+// Clean up when done
+process.on('beforeExit', async () => {
+  await permissionStore.close();
+});
 ```
 
 ## Advanced Features
@@ -183,14 +179,22 @@ function ChatComponent() {
 Implement your own permission storage:
 
 ```typescript
-import { PermissionStore } from 'mastra-permission-tools';
+import { IPermissionStore } from 'mastra-permission-tools';
 
-class RedisPermissionStore extends PermissionStore {
-  async getPermission(key: string): Promise<boolean | null> {
+class RedisPermissionStore implements IPermissionStore {
+  async getPermission(key: string): Promise<PermissionInfo | null> {
     // Your Redis implementation
   }
   
   async setPermission(key: string, granted: boolean, expiresIn?: string): Promise<void> {
+    // Your Redis implementation
+  }
+  
+  async removePermission(key: string): Promise<void> {
+    // Your Redis implementation
+  }
+  
+  async clearExpiredPermissions(): Promise<void> {
     // Your Redis implementation
   }
 }
@@ -230,21 +234,13 @@ Creates a set of tools for handling permission responses. Returns:
 - `checkPermissionStatus`: Tool to check the current permission status for a tool
 - `clearPermission`: Tool to clear permission for a specific tool
 
-### React Components
+### Storage Implementations
 
-#### `PermissionDialog`
-A customizable dialog component for permission requests.
+#### `MemoryPermissionStore`
+In-memory implementation of permission storage (non-persistent).
 
-#### `SecurityBadge`
-A visual indicator for security levels.
-
-### React Hooks
-
-#### `usePermissionDialog()`
-A hook for managing permission dialogs.
-
-#### `usePermissionState()`
-A hook for managing and tracking permission states.
+#### `PgPermissionStore`
+PostgreSQL-based implementation for persistent permission storage.
 
 ### Types
 
@@ -256,14 +252,6 @@ Interface for configuring tool security policies.
 
 #### `ParameterRule`
 Interface for defining parameter-based rules.
-
-## Examples
-
-See the [examples](./examples) directory for complete working examples:
-
-- [Basic Usage](./examples/basic-usage)
-- [React Integration](./examples/with-react)
-- [Custom Policy](./examples/custom-policy)
 
 ## Contributing
 

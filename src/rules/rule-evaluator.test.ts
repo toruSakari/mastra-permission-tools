@@ -6,6 +6,7 @@ import {
 	RuleFactory,
 } from "../../src/rules/rule-evaluator";
 import { SecurityLevel } from "../../src/types/security";
+import { ParameterRule } from "../types/rules";
 
 describe("rule-evaluator", () => {
 	describe("evaluateRule", () => {
@@ -74,18 +75,18 @@ describe("rule-evaluator", () => {
 				testTool: [
 					{
 						param: "amount",
-						condition: "greaterThan" as const,
+						condition: "greaterThan",
 						value: 100,
-						securityLevel: SecurityLevel.HIGH,
+						securityLevel: "high",
 					},
 					{
 						param: "type",
-						condition: "equals" as const,
+						condition: "equals",
 						value: "sensitive",
-						securityLevel: SecurityLevel.CRITICAL,
+						securityLevel: "critical",
 					},
 				],
-			};
+			} satisfies Record<string, ParameterRule[]>;
 
 			const result = evaluateParameterRules(
 				"testTool",
@@ -93,7 +94,7 @@ describe("rule-evaluator", () => {
 				rules,
 			);
 
-			expect(result.securityLevel).toBe(SecurityLevel.CRITICAL);
+			expect(result.securityLevel).toBe("critical");
 			expect(result.matchedRules).toHaveLength(2);
 		});
 
@@ -104,16 +105,16 @@ describe("rule-evaluator", () => {
 						param: "amount",
 						condition: "greaterThan" as const,
 						value: 100,
-						securityLevel: SecurityLevel.LOW,
+						securityLevel: "low",
 					},
 					{
 						param: "amount",
 						condition: "greaterThan" as const,
 						value: 1000,
-						securityLevel: SecurityLevel.HIGH,
+						securityLevel: "high",
 					},
 				],
-			};
+			} satisfies Record<string, ParameterRule[]>;
 
 			const result = evaluateParameterRules(
 				"testTool",
@@ -121,7 +122,7 @@ describe("rule-evaluator", () => {
 				rules,
 			);
 
-			expect(result.securityLevel).toBe(SecurityLevel.HIGH);
+			expect(result.securityLevel).toBe("high");
 		});
 
 		it("should handle no matching rules", () => {
@@ -140,19 +141,19 @@ describe("rule-evaluator", () => {
 
 	describe("RuleFactory", () => {
 		it("should create amountGreaterThan rule", () => {
-			const rule = RuleFactory.amountGreaterThan(1000, SecurityLevel.HIGH);
+			const rule = RuleFactory.amountGreaterThan(1000, "high");
 
 			expect(rule.param).toBe("amount");
 			expect(rule.condition).toBe("greaterThan");
 			expect(rule.value).toBe(1000);
-			expect(rule.securityLevel).toBe(SecurityLevel.HIGH);
+			expect(rule.securityLevel).toBe("high");
 		});
 
 		it("should create patternMatches rule", () => {
 			const rule = RuleFactory.patternMatches(
 				"email",
 				"^[a-z]+@[a-z]+\\.com$",
-				SecurityLevel.MEDIUM,
+				"medium",
 			);
 
 			expect(rule.param).toBe("email");

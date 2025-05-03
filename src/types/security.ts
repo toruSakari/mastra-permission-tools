@@ -1,12 +1,14 @@
 import { ParameterRule } from "./rules";
 
-export enum SecurityLevel {
+export enum SecurityLevelEnum {
 	NONE = "none",
 	LOW = "low",
 	MEDIUM = "medium",
 	HIGH = "high",
 	CRITICAL = "critical",
 }
+
+export type SecurityLevel = `${SecurityLevelEnum}`;
 
 export interface ToolMetadata {
 	securityLevel?: SecurityLevel;
@@ -19,7 +21,7 @@ export interface ToolMetadata {
 
 export interface SecurityPolicy {
 	tools: Record<string, ToolMetadata>;
-	categories: Record<string, { securityLevel: SecurityLevel }>;
+	categories?: Record<string, { securityLevel: SecurityLevel }>;
 	defaults: Partial<
 		Record<
 			SecurityLevel,

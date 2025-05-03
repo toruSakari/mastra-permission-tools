@@ -14,7 +14,7 @@ describe("parameter-rules", () => {
 				expect(rule.param).toBe("amount");
 				expect(rule.condition).toBe("greaterThan");
 				expect(rule.value).toBe(1000);
-				expect(rule.securityLevel).toBe(SecurityLevel.HIGH);
+				expect(rule.securityLevel).toBe("high");
 			});
 
 			it("should define critical value transaction rule", () => {
@@ -22,7 +22,7 @@ describe("parameter-rules", () => {
 				expect(rule.param).toBe("amount");
 				expect(rule.condition).toBe("greaterThan");
 				expect(rule.value).toBe(10000);
-				expect(rule.securityLevel).toBe(SecurityLevel.CRITICAL);
+				expect(rule.securityLevel).toBe("critical");
 			});
 
 			it("should define unknown recipient rule", () => {
@@ -30,7 +30,7 @@ describe("parameter-rules", () => {
 				expect(rule.param).toBe("recipient");
 				expect(rule.condition).toBe("equals");
 				expect(rule.value).toBe("unknown");
-				expect(rule.securityLevel).toBe(SecurityLevel.HIGH);
+				expect(rule.securityLevel).toBe("high");
 			});
 		});
 
@@ -40,7 +40,7 @@ describe("parameter-rules", () => {
 				expect(rule.param).toBe("fields");
 				expect(rule.condition).toBe("contains");
 				expect(rule.value).toEqual(["ssn", "credit_card", "password"]);
-				expect(rule.securityLevel).toBe(SecurityLevel.HIGH);
+				expect(rule.securityLevel).toBe("high");
 			});
 
 			it("should define bulk access rule", () => {
@@ -48,7 +48,7 @@ describe("parameter-rules", () => {
 				expect(rule.param).toBe("records");
 				expect(rule.condition).toBe("greaterThan");
 				expect(rule.value).toBe(100);
-				expect(rule.securityLevel).toBe(SecurityLevel.MEDIUM);
+				expect(rule.securityLevel).toBe("medium");
 			});
 		});
 
@@ -60,7 +60,7 @@ describe("parameter-rules", () => {
 				expect(rule.value).toBe(
 					"^(?!https://(api\\.trusted\\.com|api\\.partner\\.com))",
 				);
-				expect(rule.securityLevel).toBe(SecurityLevel.MEDIUM);
+				expect(rule.securityLevel).toBe("medium");
 			});
 
 			it("should define high frequency rule", () => {
@@ -68,7 +68,7 @@ describe("parameter-rules", () => {
 				expect(rule.param).toBe("requestsPerMinute");
 				expect(rule.condition).toBe("greaterThan");
 				expect(rule.value).toBe(100);
-				expect(rule.securityLevel).toBe(SecurityLevel.MEDIUM);
+				expect(rule.securityLevel).toBe("medium");
 			});
 		});
 
@@ -78,7 +78,7 @@ describe("parameter-rules", () => {
 				expect(rule.param).toBe("path");
 				expect(rule.condition).toBe("startsWith");
 				expect(rule.value).toBe("/system");
-				expect(rule.securityLevel).toBe(SecurityLevel.CRITICAL);
+				expect(rule.securityLevel).toBe("critical");
 			});
 
 			it("should define large file rule", () => {
@@ -86,7 +86,7 @@ describe("parameter-rules", () => {
 				expect(rule.param).toBe("size");
 				expect(rule.condition).toBe("greaterThan");
 				expect(rule.value).toBe(10 * 1024 * 1024); // 10MB
-				expect(rule.securityLevel).toBe(SecurityLevel.MEDIUM);
+				expect(rule.securityLevel).toBe("medium");
 			});
 		});
 	});

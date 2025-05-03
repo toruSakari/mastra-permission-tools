@@ -1,5 +1,4 @@
 import { ParameterRule } from "../types/rules";
-import { SecurityLevel } from "../types/security";
 import { RuleFactory } from "./rule-evaluator";
 
 /**
@@ -19,19 +18,19 @@ export const CommonParameterRules = {
 	financial: {
 		highValueTransaction: RuleFactory.amountGreaterThan(
 			1000,
-			SecurityLevel.HIGH,
+			"high",
 			"High-value transaction requires additional approval",
 		),
 		criticalValueTransaction: RuleFactory.amountGreaterThan(
 			10000,
-			SecurityLevel.CRITICAL,
+			"critical",
 			"Critical-value transaction requires special authorization",
 		),
 		unknownRecipient: {
 			param: "recipient",
 			condition: "equals" as const,
 			value: "unknown",
-			securityLevel: SecurityLevel.HIGH,
+			securityLevel: "high",
 			message: "Transaction to unknown recipient requires approval",
 		},
 	},
@@ -44,13 +43,13 @@ export const CommonParameterRules = {
 			param: "fields",
 			condition: "contains" as const,
 			value: ["ssn", "credit_card", "password"],
-			securityLevel: SecurityLevel.HIGH,
+			securityLevel: "high",
 			message: "Accessing sensitive data fields requires approval",
 		},
 		bulkAccess: RuleFactory.arrayLengthGreaterThan(
 			"records",
 			100,
-			SecurityLevel.MEDIUM,
+			"medium",
 			"Bulk data access requires approval",
 		),
 	},
@@ -63,14 +62,14 @@ export const CommonParameterRules = {
 			param: "url",
 			condition: "regex" as const,
 			value: "^(?!https://(api\\.trusted\\.com|api\\.partner\\.com))",
-			securityLevel: SecurityLevel.MEDIUM,
+			securityLevel: "medium",
 			message: "External API call to untrusted domain requires approval",
 		},
 		highFrequency: {
 			param: "requestsPerMinute",
 			condition: "greaterThan" as const,
 			value: 100,
-			securityLevel: SecurityLevel.MEDIUM,
+			securityLevel: "medium",
 			message: "High-frequency API calls require approval",
 		},
 	},
@@ -83,18 +82,18 @@ export const CommonParameterRules = {
 			param: "path",
 			condition: "startsWith" as const,
 			value: "/system",
-			securityLevel: SecurityLevel.CRITICAL,
+			securityLevel: "critical",
 			message: "System file access requires critical approval",
 		},
 		largeFile: {
 			param: "size",
 			condition: "greaterThan" as const,
 			value: 10 * 1024 * 1024, // 10MB
-			securityLevel: SecurityLevel.MEDIUM,
+			securityLevel: "medium",
 			message: "Large file operation requires approval",
 		},
 	},
-};
+} satisfies Record<string, Record<string, ParameterRule>>;
 
 /**
  * ルールセットを作成するユーティリティ関数

@@ -1,4 +1,4 @@
-import { SecurityLevel } from "../types/security";
+import { SecurityLevelEnum, SecurityLevel } from "../types/security";
 import { ParameterCondition } from "../types/rules";
 
 /**
@@ -6,7 +6,7 @@ import { ParameterCondition } from "../types/rules";
  * @param value 検証する値
  */
 export function isValidSecurityLevel(value: any): value is SecurityLevel {
-	return Object.values(SecurityLevel).includes(value);
+	return Object.values(SecurityLevelEnum).includes(value);
 }
 
 /**
