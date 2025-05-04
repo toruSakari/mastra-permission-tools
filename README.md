@@ -15,11 +15,11 @@ A TypeScript/JavaScript library that provides a robust permission control system
 ## Installation
 
 ```bash
-npm install mastra-permission-tools
+npm install @toru-sakari/mastra-permission-tools
 # or
-yarn add mastra-permission-tools
+yarn add @toru-sakari/mastra-permission-tools
 # or
-pnpm add mastra-permission-tools
+pnpm add @toru-sakari/mastra-permission-tools
 ```
 
 ## Quick Start
@@ -30,7 +30,7 @@ import {
   createPermissionHooks, 
   createPermissionTools,
   MemoryPermissionStore 
-} from 'mastra-permission-tools';
+} from '@toru-sakari/mastra-permission-tools';
 import { Agent } from '@mastra/core/agent';
 
 // Define your security policy
@@ -146,7 +146,7 @@ const agent = new Agent({
 Use PostgreSQL for persistent permission storage:
 
 ```typescript
-import { PgPermissionStore } from 'mastra-permission-tools';
+import { PgPermissionStore } from '@toru-sakari/mastra-permission-tools';
 
 // Create a PostgreSQL store
 const permissionStore = new PgPermissionStore({
@@ -179,7 +179,7 @@ process.on('beforeExit', async () => {
 Implement your own permission storage:
 
 ```typescript
-import { IPermissionStore } from 'mastra-permission-tools';
+import { IPermissionStore } from '@toru-sakari/mastra-permission-tools';
 
 class RedisPermissionStore implements IPermissionStore {
   async getPermission(key: string): Promise<PermissionInfo | null> {
